@@ -1,0 +1,94 @@
+#include <iostream>
+#include <vector>
+
+template<typename T>
+std::string stringify(T t){
+	return std::to_string(t);
+}
+
+template<>
+inline std::string stringify<std::string>(std::string string){
+	return string;
+}
+
+template<typename K, typename V>
+class Entry{
+
+	public:
+		K   key;
+		V   value;
+		int index;
+
+		Entry(K key, V value): key{key}, value{value}{}
+
+		bool operator< (Entry& other){ return (this->key < other.key); }
+		bool operator> (Entry& other){ return (this->key > other.key); }
+		bool operator<=(Entry& other){ return (!(*this>other)); }
+		bool operator>=(Entry& other){ return (!(*this<other)); }
+		bool operator==(Entry& other){
+			bool eq_keys   = this->key   == other.key;
+			bool eq_values = this->value == other.value;
+			return (eq_keys && eq_values);
+		}
+
+		std::string to_string(){
+			/*****************************************************************
+			 * Produces std::string representation of the entry. Will break  *
+			 * if either of the templated types is not in the standard       *
+			 * library                                                       *
+			 *****************************************************************/
+			std::string output_str;
+			auto key_string  = stringify(key);
+			auto val_string  = stringify(value);
+			output_str = output_str 
+				+ "("
+				+ key_string
+				+ ","
+				+ val_string
+				+ ")" ;
+			return output_str;
+		}
+
+};
+
+template<typename K, typename V>
+class PriorityQueue{
+	
+	private:
+		std::vector<Entry<K,V>> container;
+
+		int parent_index(int i){
+			if (i <= 0 )        { throw std::out_of_range("Node is root node");}
+			if (i >= this->size){ throw std::out_of_range("No such index");}
+			int remainder = i % 2;	// if 0 even if 1 odd
+			if (remainder == 0) { remainder = 2;}
+			return ((i-remainder)/2);
+		}
+
+		Entry<K,V>& parent(int i){
+			int parent_index = parent_index(i);
+			return container[parent_index];
+		}
+
+		Entry<K,V>& parent(Entry<K,V>& entry){
+			int parent_index = parent_index(entry.index);
+			return container[parent_index];
+		}
+	
+		//Note to self add bookeeping for index in the move method
+		
+
+		
+
+	public:
+		PriorityQueue(){}
+
+		size_t size()  { return(container.size()); }
+		bool is_empty(){ return(container.empty()); }
+
+		void insert(){}
+		Entry<K,V> remove_min(){}
+		Entry<K,V>& min(){}
+		std::string to_string(){}
+
+};
