@@ -26,8 +26,16 @@ enable_testing()
 
 add_executable(
 	tests
-	src/priority-queue.hpp
+	incl/priority-queue.hpp
+	src/utils.cpp
 	test/priority-queue-tests.cpp
+)
+
+add_executable(
+	reflection
+	incl/priority-queue.hpp
+	src/utils.cpp
+	src/slides.cpp
 )
 
 target_link_libraries(
